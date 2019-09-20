@@ -4,7 +4,7 @@
 \alias{tex_figures}
 \title{FUNCTION_TITLE}
 \usage{
-tex_figures(captions, figure_files_dir = "figure",
+tex_figures(captions, figure_files_dir = "../deliv/figure",
   analysis = "efficacy", only_tex = TRUE)
 }
 \arguments{

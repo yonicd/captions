@@ -4,8 +4,8 @@
 \alias{tex_tables}
 \title{FUNCTION_TITLE}
 \usage{
-tex_tables(captions, table_files_dir = "table", analysis = "efficacy",
-  only_tex = TRUE)
+tex_tables(captions, table_files_dir = "../deliv/table",
+  analysis = "efficacy", only_tex = TRUE)
 }
 \arguments{
 \item{captions}{character, Named character vector. Names are the same as the figure filenames in deliv/table and the value is the caption}

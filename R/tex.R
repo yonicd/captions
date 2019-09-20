@@ -13,20 +13,21 @@
 #' @importFrom tools file_path_sans_ext
 #' @importFrom purrr pmap_chr
 #' @importFrom glue glue
-tex_tables <- function(captions, table_files_dir = 'table',analysis = 'efficacy',only_tex = TRUE){
+#' @importFrom rlang sym !!
+tex_tables <- function(captions, table_files_dir = '../deliv/table',analysis = 'efficacy',only_tex = TRUE){
   
-  tbl <- tibble::enframe(tbl_captions,name = 'stem',value = 'caption')%>%
+  tbl <- tibble::enframe(captions,name = 'stem',value = 'caption')%>%
   dplyr::left_join(
     tibble::tibble(
-      file = list.files(file.path('../deliv',table_files_dir),pattern = '.tex$'),
+      file = list.files(table_files_dir,pattern = '.tex$'),
       stem = tools::file_path_sans_ext(file),
-      path = file.path('..',table_files_dir,file)
+      path = file.path(table_files_dir,file)
     ), by='stem')%>%
   dplyr::mutate(
-    tex = purrr::pmap_chr(list(file = path,stem = stem,caption = caption),
+    tex = purrr::pmap_chr(list(file = !!rlang::sym('path'),stem = !!rlang::sym('stem'),caption = !!rlang::sym('caption')),
                           .f=function(file,stem,caption,analysis){
                             
-                            wrap_tbl(TABLE = glue::glue("\\input{{file}}"),
+                            wrap_tbl(TABLE = tex_include(file),
                                      LABEL = glue::glue('tbl:{analysis}_{stem}'),
                                      CAPTION = caption)
                             
@@ -55,17 +56,18 @@ tex_tables <- function(captions, table_files_dir = 'table',analysis = 'efficacy'
 #' @importFrom tools file_path_sans_ext
 #' @importFrom purrr pmap_chr
 #' @importFrom glue glue
-tex_figures <- function(captions,figure_files_dir = 'figure',analysis = 'efficacy', only_tex = TRUE){
+#' @importFrom rlang sym !!
+tex_figures <- function(captions,figure_files_dir = '../deliv/figure',analysis = 'efficacy', only_tex = TRUE){
   
   tbl <- tibble::enframe(captions,name = 'stem',value = 'caption')%>%
     dplyr::left_join(
       tibble::tibble(
         file = list.files(file.path('../deliv',figure_files_dir)),
         stem = tools::file_path_sans_ext(file),
-        path = file.path('..',figure_files_dir,file)
+        path = file.path(figure_files_dir,'..',file)
       ), by='stem')%>%
     dplyr::mutate(
-      tex = purrr::pmap_chr(list(file = path,stem = stem,caption = caption),
+      tex = purrr::pmap_chr(list(file = !!rlang::sym('path'),stem = !!rlang::sym('stem'),caption = !!rlang::sym('caption')),
                             .f=function(file,stem,caption,analysis){
                               file%>%
                                 include_fig()%>%

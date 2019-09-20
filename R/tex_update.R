@@ -7,10 +7,10 @@
 #' @param show_only_new logical, return to the console what only new section (useful for testing), Default: FALSE
 #' @param overwrite logical, overwrite the file, Default: FALSE
 #' @return character
-#' @rdname update_tex
+#' @rdname tex_update
 #' @export 
 #' @importFrom glue glue
-update_tex <- function(tex, file, section = 'Efficacy', type = 'Tables', show_only_new = FALSE, overwrite = FALSE){
+tex_update <- function(tex, file, section = 'Efficacy', type = 'Tables', show_only_new = FALSE, overwrite = FALSE){
   
   doc <- readLines(file)
   
@@ -27,11 +27,18 @@ update_tex <- function(tex, file, section = 'Efficacy', type = 'Tables', show_on
     
   }
   
-  doc1 <- doc[1 : (idx[1] - 2)]
-  
-  
-  if((idx[2] + 1) < length(doc))
-    doc2 <- doc[(idx[2] + 2):length(doc)]  
+  if(!length(doc)){
+    
+    doc1 <- doc2 <- ''
+    
+  }else{
+    
+    doc1 <- doc[1 : (idx[1] - 2)]  
+
+    if((idx[2] + 1) < length(doc))
+      doc2 <- doc[(idx[2] + 2):length(doc)]  
+        
+  }
   
   thisdoc <- c(
     tex_block(glue::glue('{template} Start')),

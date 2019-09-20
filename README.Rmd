@@ -69,20 +69,68 @@ mtcars%>%
   captions::wrap_tbl()
 ```
 
-### Wrap include call to table file
+Create some files in `tempdir/deliv/table`
 
 ```{r}
-  
-tf <- tempfile(fileext = '.tex')
+td <- file.path(tempdir(),'deliv/table')
+dir.create(td,recursive = TRUE)
+
+tf1 <- file.path(td,'mtcars_head.tex')
+file.create(tf1)
+
+tf2 <- file.path(td,'mtcars_tail.tex')
+file.create(tf2)
 
 mtcars%>%
   head()%>%
   knitr::kable(format = 'latex')%>%
   as.character()%>%
-  cat(file = tf)
+  captions::wrap_tbl()%>%
+  cat(file = tf1)
 
-tf%>%
+mtcars%>%
+  tail()%>%
+  knitr::kable(format = 'latex')%>%
+  as.character()%>%
+  captions::wrap_tbl()%>%
+  cat(file = tf2)
+```
+
+### Wrap include call to table file
+
+```{r}
+tf1%>%
   tex_include()%>%
   captions::wrap_tbl()
 
+```
+
+## Populate an Output file
+
+```{r}
+
+
+table_file <- file.path(tempdir(),'deliv/tables.tex')
+
+file.create(table_file)
+
+# Names of the elements in the caption vector is the same as the files in deliv/table
+
+caption <- c(
+  mtcars_head = 'First 5 Rows of mtcars',
+  mtcars_tail = 'Last 5 Rows of mtcars'
+  )
+
+captions::tex_update(
+  tex = captions::tex_tables(caption,table_files_dir = td),
+  file = table_file,
+  section = 'Example',
+  type = 'Tables',
+  overwrite = TRUE)
+
+
+```
+
+```{r}
+cat(readLines(table_file),sep = '\n')
 ```
