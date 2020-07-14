@@ -2,14 +2,14 @@ Package: captions
 Type: Package
 Title: TeX captions
 Version: 0.0.2
-Authors@R: person("Jonathan Sidi",role=c("aut","cre"),email="yonis@metrumrg.com")
+Authors@R: person("Jonathan Sidi",role=c("aut","cre"),email="yonicd@gmail.com")
 Description: Templates for TeX figure and table environments.
 Depends: R (>= 3.2.0)
 Imports: glue,magrittr,purrr,tibble,dplyr,tools,rlang
 Encoding: UTF-8
 LazyData: true
-URL: https://ghe.metrumrg.com/yoni/captions
-BugReports: https://ghe.metrumrg.com/yoni/captions/issues
+URL: https://github.com/yonicd/captions/captions
+BugReports: https://github.com/yonicd/captions/captions/issues
 RoxygenNote: 6.1.1
 Roxygen: list(markdown = TRUE)
 License: MIT + file LICENSE
